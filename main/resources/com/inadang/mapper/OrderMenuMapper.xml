@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.inadang.mapper.OrderMenuMapper">
+  
+	<insert id="insert">
+		<selectKey keyProperty="omno" order="BEFORE" resultType="Long">
+			SELECT seq_ordermenu.nextval FROM DUAL
+		</selectKey>
+		INSERT INTO tbl_orderMenu 
+		VALUES (#{ono}, #{count}, #{price}, #{omno}, #{mno})
+	</insert>
+	
+  	<select id="getList" resultType="orderMenu">
+  		<![CDATA[
+  		SELECT * FROM tbl_ordermenu WHERE omno > 0
+  		]]>
+  	</select>
+  	
+  	<select id="findBy" resultType="orderMenu">
+  		SELECT M.NAME, M.PRICE, N.COUNT FROM TBL_MENU M JOIN TBL_ORDERMENU N USING(mno) WHERE ono = #{ono}
+  	</select>
+
+	<!-- <select id="get">
+		SELECT * FROM tbl_ordermenu WHERE ono = #{ono}
+	</select> -->
+
+	<delete id="delete">
+		DELETE tbl_ordermenu WHERE mno = #{mno}
+	</delete>	
+	
+	<delete id="deleteAll">
+		DELETE tbl_ordermenu  WHERE ono = #{ono}
+	</delete>	
+	
+  </mapper>

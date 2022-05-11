@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.inadang.mapper.CartMapper">
+	<insert id="insertCart">
+  		INSERT INTO TBL_CART(CNO, MNO, COUNT, ID)
+  		VALUES(SEQ_CART.NEXTVAL, #{mno}, #{count}, #{id})
+  	</insert>
+  	
+  	<delete id="delete">
+  		DELETE TBL_CART WHERE MNO = #{mno} AND ID = #{id}
+  	</delete>
+  	
+  	<delete id="drop">
+  		DELETE TBL_CART WHERE ID = #{id}
+  	</delete>
+  	
+  	<select id="checkCart" resultType="Integer">
+  		SELECT COUNT(*) FROM TBL_CART WHERE MNO = #{mno} AND ID = #{id}
+  	</select>
+  	
+  	
+	
+  </mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.inadang.mapper.OrderMapper">
+  	<select id="getList" resultType="order">
+		SELECT * FROM tbl_order WHERE ono IS NOT NULL
+  	</select>
+  	
+  	<select id="get" resultType="order">
+  		SELECT * FROM tbl_order WHERE ono = #{ono}
+  	</select>
+  	
+  	<insert id="insert">
+		INSERT INTO tbl_order (ono, id, name, amount)
+		VALUES(concat('ORD',(TO_CHAR(sysdate, 'yyymmddhh24mmss'))), #{id}, #{name}, #{amount})
+  	</insert>
+  	
+  	<delete id="delete">
+  		DELETE tbl_order WHERE ono = #{ono}
+  	</delete>
+  	
+  	<!-- 주문취소 -->
+  	<update id="cancle"> 
+  		UPDATE tbl_order set
+  		status = #{status}
+  		WHERE ono = #{ono} 
+  	</update>
+  	
+  	<!-- 총가격 -->
+  	<update id="amount">
+  	UPDATE tbl_order SET
+	AMOUNT = (
+	SELECT sum(price)
+	FROM tbl_orderMenu
+	where ono = #{ono}
+	)where ono = #{ono}
+  	</update>
+  	
+  </mapper>

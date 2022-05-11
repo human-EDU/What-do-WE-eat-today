@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.inadang.mapper.StoreMapper">
+	<select id="selectAll" resultType="store">
+		SELECT * FROM TBL_STORE
+	</select>
+	
+	<select id="selectAd" resultType="store">
+		SELECT * FROM TBL_STORE WHERE AD > SYSDATE
+		<if test="category != 0">
+			AND CATEGORY = #{category}
+		</if>
+	</select>
+	
+	<select id="selectLogo" resultType="storeAttach">
+		SELECT * FROM TBL_STORE_ATTACH WHERE SNO = #{sno}
+	</select>
+	
+	<select id="selectAllByCategory" resultType="store">
+		SELECT RN, B.* FROM(
+		SELECT ROWNUM RN, A.* FROM (
+		SELECT * FROM TBL_STORE
+		<if test="category != 0">
+			WHERE CATEGORY = #{category}
+		</if>
+		
+		<if test="condition == 'R'.toString()">
+			ORDER BY REVIEWNUM DESC
+		</if>
+		<if test="condition == 'S'.toString()">
+			ORDER BY SCOPE DESC
+		</if>
+		<if test="condition == 'D'.toString()">
+			ORDER BY DELTIME
+		</if>
+		<if test="condition == 'M'.toString()">
+			ORDER BY MINPRICE
+		</if>
+		) A) B
+		WHERE RN > #{cri.lastNo}
+		AND ROWNUM &lt;= #{cri.amount}
+	</select>
+  
+  
+  	<select id="select" resultType="store">
+  		SELECT * FROM TBL_STORE WHERE SNO = #{sno}
+  	</select>
+  	
+  	<insert id="insertSelectKey">
+		<selectKey keyProperty="sno" order="BEFORE" resultType="long">
+			SELECT SEQ_STORE.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO TBL_STORE(SNO, CATEGORY, NAME, BNO, ADDRESS, STARTTIME, ENDTIME, NOTICE, ORIGININFO, MINPRICE, DELPRICE, DELTIME)
+    	VALUES(#{sno}, #{category}, #{name}, #{bno}, #{address}, #{startTime}, #{endTime}, #{notice}, #{originInfo}, #{minPrice}, #{delPrice}, #{delTime})
+	</insert>
+	
+	<select id="read" resultType="store">
+		SELECT * FROM TBL_STORE WHERE SNO = #{sno}
+	</select>
+	
+  </mapper>
